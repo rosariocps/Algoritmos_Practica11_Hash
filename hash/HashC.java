@@ -31,4 +31,12 @@ public class HashC {
         }
     } 
 
+    /**
+     * Función hash: calcula el índice a partir de la clave.
+     * Usa módulo: h(key) = key % size
+     */
+    private int hash(int key) {
+        return key % size;
+    }
+
 }
