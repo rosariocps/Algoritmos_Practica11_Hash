@@ -17,6 +17,18 @@ public class HashC {
     }
 
     private Element[] table; // Arreglo de elementos (la tabla hash)
-    private int size; // Tamaño de la tabla
+    private int size; // Tamaño de la tabla (se recomienda que sea un número primo)
+
+    /**
+     * Constructor que inicializa la tabla hash con el tamaño indicado.
+     * Cada celda es creada como un Element vacío y disponible.
+     */    
+    public HashC(int size) {
+        this.size = size;
+        this.table = new Element[size];
+        for (int i = 0; i < size; i++) {
+            table[i] = new Element();
+        }
+    } 
 
 }
