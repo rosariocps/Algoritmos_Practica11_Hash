@@ -28,6 +28,9 @@ import linkedlist.Nodo;
             // en cada posicion del arreglo creo una lista vacia
         }
     }
+    public int getSize() { return size; }
+    public linkedlist.ListaEnlazada<Register> getBucket(int idx) { return table[idx]; }
+
 
     // funcion hash (clave % tamaño)
     private int hash(int key) {

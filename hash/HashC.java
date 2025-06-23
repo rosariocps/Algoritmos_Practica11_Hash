@@ -29,7 +29,10 @@ public class HashC {
         for (int i = 0; i < size; i++) {
             table[i] = new Element();
         }
-    } 
+    }
+    public int getSize() { return size; }
+    public Element getElement(int idx) { return table[idx]; }
+ 
 
     /**
      * Función hash: calcula el índice a partir de la clave.
