@@ -7,10 +7,10 @@ public class TestEntero {
         // creo una tabla hash de tamaño 7
 
         // insertar valores sin colisiones (aunque aqui todos colisionan)
-        tabla.insert(3);    // 3 % 7 = 3, va al indice 3
-        tabla.insert(10);   // 10 % 7 = 3, colision, va al mismo indice 3
-        tabla.insert(17);   // 17 % 7 = 3, otra colision en el indice 3
-        tabla.insert(24);   // 24 % 7 = 3, tambien va al indice 3
+        tabla.insert(3);    // 3 % 7 = 3
+        tabla.insert(4);   // 4 % 7 = 4
+        tabla.insert(5);   // 5 % 7 = 5
+        tabla.insert(6);   // 6 % 7 = 6
 
         // mostrar tabla hash
         System.out.println("Tabla hash final:"); 
