@@ -16,7 +16,7 @@ public class HashC {
         }
     }
 
-    private Element[] table; // arreglo de celdas
+    private Element[] table; // arreglo de celdas de tipo Element 
     private int size;        // tamaño de la tabla (debe ser primo idealmente)
 
     /**
@@ -25,7 +25,7 @@ public class HashC {
     public HashC(int size) {
         this.size  = size;
         this.table = new Element[size];
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) { //aqui recorremos las posiciones e inicializo con un nuevo Element vacio  disponible
             table[i] = new Element();
         }
     }
@@ -42,19 +42,21 @@ public class HashC {
      * si la tabla está llena, simplemente no inserta.
      */
     public void insert(Register reg) {
-        int start = hash(reg.getKey());
-        int idx   = start;
+        int start = hash(reg.getKey()); //vamoa a calcular el indice incial
+        int idx   = start; //como una copia para hacer el recorrido
+        //bucle do…while que garantiza al menos una iteracion
         do {
-            Element e = table[idx];
-            // si la celda está libre o borrada
+            Element e = table[idx]; //en el objeto e almacenamos la celda actual
+            // si la celda está libre o borrada isAvailable=true
             if (e.register == null || e.isAvailable) {
                 e.register    = reg;      // guardo el registro
                 e.isAvailable = false;    // marco como ocupado
                 return;
             }
-            idx = (idx + 1) % size;      // avanzo al siguiente slot
+            //para avanzar al siguiente índice en la tabla de forma ciclica(del final vuelves al principio) "wrap‐around"
+            idx = (idx + 1) % size; 
         } while (idx != start);
-        // si vuelvo al inicio, la tabla está llena y no inserto
+        // termina si vuelvo al inicio, la tabla está llena y no inserto
     }
 
     /**
@@ -62,43 +64,49 @@ public class HashC {
      * devuelve el Register o null si no está.
      */
     public Register search(int key) {
-        int start = hash(key);
-        int idx   = start;
+        int start = hash(key); //vamos a calcular el indice incial
+        int idx   = start; //como una copia para hacer el recorrido
+        //bucle do…while que garantiza al menos una iteracion
         do {
-            Element e = table[idx];
-            // si encuentro el registro buscado
-            if (e.register != null && !e.isAvailable
-                && e.register.getKey() == key) {
-                return e.register;
+            Element e = table[idx]; //e es la celda actua en table[idx]
+            // si e.register != null : osea hay un registro
+            // !e.isAvailable: que esa celda no sea un tombstone (no fue borrada)
+            // e.register.getKey() == key: que la clave del registro coincida con la buscada
+            if (e.register != null && !e.isAvailable && e.register.getKey() == key) {
+                return e.register; // lo encontramos  :D y lo retorno
             }
             // si llego a una celda nunca usada, ya no existe
             if (e.register == null && e.isAvailable) {
-                break;
+                break; //terminamos el bucle
             }
-            idx = (idx + 1) % size;
-        } while (idx != start);
-        return null;
+            //si ninguna de las anteriores se cumplio entonces avanzamos al siguiente indice de forma ciclica
+            idx = (idx + 1) % size; //% size asegurar que siempre quede entre 0 y size−1
+        } while (idx != start); //repetimos hasta que idx vuelva a start, una vuelta completa sin exito
+        return null; //no encontrado
     }
 
     /**
      * eliminación lógica: marca la celda como disponible de nuevo.
      */
     public void delete(int key) {
-        int start = hash(key);
-        int idx   = start;
+        int start = hash(key); //vamos a calcular el indice incial
+        int idx   = start; //como una copia para hacer el recorrido
+        //bucle do…while que garantiza al menos una iteracion
         do {
-            Element e = table[idx];
-            if (e.register != null && !e.isAvailable
-                && e.register.getKey() == key) {
-                e.register    = null;
-                e.isAvailable = true;
+            Element e = table[idx]; //e es la celda actua en table[idx]
+            //que la celda tenga un objeto y que no sea un tombstone (borrado) y q sea el registro que buscamos
+            if (e.register != null && !e.isAvailable && e.register.getKey() == key) {
+                e.register    = null; //ponemos null para eliminar el objeto
+                e.isAvailable = true; //y que ahora esta vacio
                 return;
             }
+            //si encontramos una celda nunca usada
             if (e.register == null && e.isAvailable) {
-                break;
+                break; //la clave no existe mas adelante entonces rompemos el ciclo
             }
-            idx = (idx + 1) % size;
-        } while (idx != start);
+            //si ninguna de las anteriores se cumplio entonces avanzamos al siguiente indice de forma ciclica
+            idx = (idx + 1) % size; //% size asegurar que siempre quede entre 0 y size−1
+        } while (idx != start); //repetimos hasta que idx vuelva a start, una vuelta completa sin exito
     }
 
     /**
@@ -106,14 +114,22 @@ public class HashC {
      * para cada índice muestra: (key, name)  o '(vacío)' o '(borrado)'.
      */
     public void printTable() {
+        //bucle que va de i = 0 hasta i = size - 1, cubriendo todas las posiciones de la tabla
         for (int i = 0; i < size; i++) {
-            Element e = table[i];
+            Element e = table[i]; //obtenemos la celda Element que esta en la posicion i del table
+            //formateado entre corchetes (por ejemplo [ 0]: o [10]: ) 
             System.out.printf("[%2d]: ", i);
+            // Caso 1: la celda está ocupada por un registro
             if (e.register != null && !e.isAvailable) {
+                //imprime el toString() de ese objeto Register : (clave, nombre)
                 System.out.println(e.register);
+            //Caso 2: la celda nunca se ha usado
             } else if (e.register == null && e.isAvailable) {
+                //imprime la palabra (vacio)
                 System.out.println("(vacío)");
-            } else {
+            //Caso 3: la celda ha sido ocupada y luego borrada (tombstone)
+            } else { //e.register == null pero e.isAvailable == false
+                //imprime (borrado)
                 System.out.println("(borrado)");
             }
         }
