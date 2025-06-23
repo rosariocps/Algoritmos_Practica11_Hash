@@ -1,49 +1,84 @@
 package hash;
+// este archivo pertenece al paquete hash
 
 public class TestHash {
     public static void main(String[] args) {
+        System.out.println("=== hash cerrado (sondeo lineal) ===");
+        // imprimo titulo para la prueba de hash cerrado
 
-        HashO tabla = new HashO(5); 
-        // creo una tabla hash con tamaño 5 para que haya colisiones
+        HashC hc = new HashC(5);
+        // creo una tabla hash cerrada de tamaño 5
 
-        // insertar registros
-        tabla.insert(new Register(10, "Jani"));    
-        // 10 % 5 = 0, se guarda en el indice 0
+        hc.insert(new Register(10, "Jani"));
+        // inserto registro con clave 10 y nombre jani
 
-        tabla.insert(new Register(15, "Rosi"));    
-        // 15 % 5 = 0, tambien va al indice 0 (colision)
+        hc.insert(new Register(15, "Rosi"));
+        // inserto registro con clave 15 y nombre rosi
 
-        tabla.insert(new Register(7, "Kahori"));    
-        // 7 % 5 = 2, va al indice 2
+        hc.insert(new Register(7, "Kahori"));
+        // inserto registro con clave 7 y nombre kahori
 
-        tabla.insert(new Register(12, "Marisol"));  
-        // 12 % 5 = 2, colision con el anterior en el indice 2
+        hc.insert(new Register(12, "Marisol"));
+        // inserto registro con clave 12 y nombre marisol
 
-        tabla.insert(new Register(22, "Mafer"));    
-        // 22 % 5 = 2, otra colision en el mismo indice
+        hc.insert(new Register(22, "Mafer"));
+        // inserto registro con clave 22 y nombre mafer
 
-        // mostrar la tabla
-        System.out.println("Tabla hash con colisiones:"); 
-        // imprimo un mensaje para identificar la tabla
+        System.out.println("tabla cerrada:");
+        // indico que voy a mostrar el estado de la tabla cerrada
 
-        tabla.printTable(); 
-        // llamo a la funcion que imprime toda la tabla
+        hc.printTable();
+        // imprimo cada celda de la tabla cerrada
 
-        // buscar un elemento
-        Register encontrado = tabla.search(15); 
-        // busco el registro que tiene clave 15
+        System.out.println("\nbusqueda clave 15: " + hc.search(15));
+        // busco el registro con clave 15 e imprimo el resultado
 
-        System.out.println("Resultado de búsqueda para clave 15: " + (encontrado != null ? encontrado : "No encontrado"));
-        // si lo encontro lo muestra, si no, dice "no encontrado"
+        hc.delete(12);
+        // elimino de forma logica el registro con clave 12
 
-        // eliminar un elemento
-        tabla.delete(12); 
-        // elimino el registro con clave 12
+        System.out.println("tabla cerrada despues de eliminar clave 12:");
+        // indico que muestro la tabla cerrada tras la eliminacion
 
-        System.out.println("\nTabla después de eliminar clave 12:");
-        // muestro mensaje de que la tabla se va a volver a imprimir
+        hc.printTable();
+        // imprimo la tabla cerrada despues de la eliminacion
 
-        tabla.printTable(); 
-        // vuelvo a imprimir la tabla para ver el cambio
+        System.out.println("\n=== hash abierto (encadenamiento) ===");
+        // imprimo titulo para la prueba de hash abierto
+
+        HashO ho = new HashO(5);
+        // creo una tabla hash abierta de tamaño 5
+
+        ho.insert(new Register(10, "Jani"));
+        // inserto registro con clave 10 y nombre jani
+
+        ho.insert(new Register(15, "Rosi"));
+        // inserto registro con clave 15 y nombre rosi
+
+        ho.insert(new Register(7, "Kahori"));
+        // inserto registro con clave 7 y nombre kahori
+
+        ho.insert(new Register(12, "Marisol"));
+        // inserto registro con clave 12 y nombre marisol
+
+        ho.insert(new Register(22, "Mafer"));
+        // inserto registro con clave 22 y nombre mafer
+
+        System.out.println("tabla abierta:");
+        // indico que voy a mostrar la tabla abierta
+
+        ho.printTable();
+        // imprimo cada lista de la tabla abierta
+
+        System.out.println("\nbusqueda clave 15: " + ho.search(15));
+        // busco el registro con clave 15 en la tabla abierta e imprimo
+
+        ho.delete(12);
+        // elimino el registro con clave 12 de la tabla abierta
+
+        System.out.println("tabla abierta despues de eliminar clave 12:");
+        // indico que muestro la tabla abierta tras la eliminacion
+
+        ho.printTable();
+        // imprimo la tabla abierta despues de la eliminacion
     }
 }
