@@ -24,8 +24,9 @@ public class TestEliminarHashCerrado {
 
         System.out.println("\nbuscar 19 tras eliminar 12:");
         boolean found = t.search(19);
+
         System.out.println(found
-            ? "19 encontrado (busqueda continua tras tombstone)"
-            : "19 NO encontrado (hubiera fallado si fisicamente borrado)");
+            ? "19 encontrado (busqueda continua tras tombstone)" //si found es true
+            : "19 NO encontrado (hubiera fallado si fisicamente borrado)"); //si found es false
     }
 }
