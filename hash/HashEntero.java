@@ -1,16 +1,13 @@
 package hash;
 
 import linkedlist.ListaEnlazada;
-
+/****************EJERCICIO 1 *********************/
 public class HashEntero {
-
-    private ListaEnlazada<Integer>[] table;
     // creo un arreglo de listas enlazadas que guardan numeros enteros
-
-    private int size;
+    private ListaEnlazada<Integer>[] table;
     // variable para guardar el tamaño de la tabla
-
-    @SuppressWarnings("unchecked")
+    private int size;
+    
     public HashEntero(int size) {
         this.size = size;
         // guardo el tamaño que me pasen
