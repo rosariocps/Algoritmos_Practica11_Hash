@@ -28,9 +28,9 @@ import linkedlist.Nodo;
             // en cada posicion del arreglo creo una lista vacia
         }
     }
-    public int getSize() { return size; }
+    public int getSize() { return size; } //getter del tamaño de la lista
+    //getter de bucket(cada posicion del arreglo) en idx
     public linkedlist.ListaEnlazada<Register> getBucket(int idx) { return table[idx]; }
-
 
     // funcion hash (clave % tamaño)
     private int hash(int key) {
@@ -40,63 +40,51 @@ import linkedlist.Nodo;
 
     // insertar un registro
     public void insert(Register reg) {
-        int index = hash(reg.getKey()); 
-        // obtengo el indice aplicando la funcion hash
-
-        table[index].insertLast(reg); 
+        int index = hash(reg.getKey()); //calcula el bucket donde debe ir el registro (index)
         // inserto el registro al final de la lista en ese indice
+        table[index].insertLast(reg); 
     }
 
     // buscar un registro por clave
     public Register search(int key) {
-        int index = hash(key); 
-        // calculo el indice con la clave
-
+        int index = hash(key); //calcula el bucket inicial (index)
+        // obtengo el primer nodo de la lista en ese bucket
         Nodo<Register> current = table[index].getFirst(); 
-        // obtengo el primer nodo de la lista en ese indice
-
+        //hacemos un recorrido de la lista enlazda
         while (current != null) {
-            if (current.getData().getKey() == key) {
-                return current.getData(); 
-                // si encuentro la clave, devuelvo ese registro
+            if (current.getData().getKey() == key) { //si el Register del nodo tiene la misma clave
+                return current.getData(); // devuelvo ese registro
             }
-            current = current.getNext(); 
             // si no es, paso al siguiente nodo
+            current = current.getNext(); 
         }
-        return null; 
-        // si termine y no encontre, devuelvo null
+        return null; // si termine y no encontre, devuelvo null
     }
 
     // eliminar un registro por clave
     public void delete(int key) {
-        int index = hash(key); 
-        // calculo el indice usando la clave
-
+        int index = hash(key); //Calcula el bucket (index)
+        //obtengo el primer nodo de la lista en ese bucket
         Nodo<Register> current = table[index].getFirst(); 
-        // empiezo a recorrer la lista de ese indice
-
+        //hacemos un recorrido de la lista enlazda
         while (current != null) {
-            if (current.getData().getKey() == key) {
-                table[index].removeNodo(current.getData()); 
-                // si encuentro la clave, la elimino con removeNodo
+            if (current.getData().getKey() == key) { //si el Register del nodo tiene la misma clave
+                table[index].removeNodo(current.getData()); //eliminamos el nodo de esa lista enlazada del bucket
                 return;
             }
-            current = current.getNext(); 
-            // si no es, sigo recorriendo
+            current = current.getNext(); // si no es, sigo recorriendo
         }
     }
 
     // imprimir la tabla hash
     public void printTable() {
+        //recorre cada bucket de 0 a size−1  de la tablaaaa
         for (int i = 0; i < size; i++) {
-            System.out.println("Índice " + i + ":"); 
             // muestro el numero de indice
-
+            System.out.println("Índice " + i + ":"); 
+            // recorro e imprimo los elementos (nodos) de la lista en ese indice (bucket)
             table[i].recorrer(); 
-            // recorro e imprimo los elementos de la lista en ese indice
-
-            System.out.println(); 
-            // dejo un espacio entre indices
+            System.out.println();  // dejo un espacio entre indices
         }
     }
 }
