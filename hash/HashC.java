@@ -6,8 +6,8 @@ package hash;
 public class HashC<E> {
 
     // clase interna para representar una celda de la tabla
-    private static class Element {
-        private Register register;   // registro que guardo aquí (o null)
+    private static class Element<E> {
+        private Register<E> register;   // registro que guardo aquí (o null)
         private boolean isAvailable; // true = libre para insertar
 
         public Element() {
@@ -16,7 +16,7 @@ public class HashC<E> {
         }
     }
 
-    private Element[] table; // arreglo de celdas de tipo Element 
+    private Element<E>[] table; // arreglo de celdas de tipo Element 
     private int size;        // tamaño de la tabla (debe ser primo idealmente)
 
     /**
@@ -41,12 +41,12 @@ public class HashC<E> {
      * inserta un nuevo registro con sondeo lineal.
      * si la tabla está llena, simplemente no inserta.
      */
-    public void insert(Register reg) {
+    public void insert(Register<E> reg) {
         int start = hash(reg.getKey()); //vamoa a calcular el indice incial
         int idx   = start; //como una copia para hacer el recorrido
         //bucle do…while que garantiza al menos una iteracion
         do {
-            Element e = table[idx]; //en el objeto e almacenamos la celda actual
+            Element<E> e = table[idx]; //en el objeto e almacenamos la celda actual
             // si la celda está libre o borrada isAvailable=true
             if (e.register == null || e.isAvailable) {
                 e.register    = reg;      // guardo el registro
@@ -63,12 +63,12 @@ public class HashC<E> {
      * busca un registro por su clave.
      * devuelve el Register o null si no está.
      */
-    public Register search(int key) {
+    public Register<E> search(int key) {
         int start = hash(key); //vamos a calcular el indice incial
         int idx   = start; //como una copia para hacer el recorrido
         //bucle do…while que garantiza al menos una iteracion
         do {
-            Element e = table[idx]; //e es la celda actua en table[idx]
+            Element<E> e = table[idx]; //e es la celda actua en table[idx]
             // si e.register != null : osea hay un registro
             // !e.isAvailable: que esa celda no sea un tombstone (no fue borrada)
             // e.register.getKey() == key: que la clave del registro coincida con la buscada
@@ -93,7 +93,7 @@ public class HashC<E> {
         int idx   = start; //como una copia para hacer el recorrido
         //bucle do…while que garantiza al menos una iteracion
         do {
-            Element e = table[idx]; //e es la celda actua en table[idx]
+            Element<E> e = table[idx]; //e es la celda actua en table[idx]
             //que la celda tenga un objeto y que no sea un tombstone (borrado) y q sea el registro que buscamos
             if (e.register != null && !e.isAvailable && e.register.getKey() == key) {
                 e.register    = null; //ponemos null para eliminar el objeto
@@ -116,7 +116,7 @@ public class HashC<E> {
     public void printTable() {
         //bucle que va de i = 0 hasta i = size - 1, cubriendo todas las posiciones de la tabla
         for (int i = 0; i < size; i++) {
-            Element e = table[i]; //obtenemos la celda Element que esta en la posicion i del table
+            Element<E> e = table[i]; //obtenemos la celda Element que esta en la posicion i del table
             //formateado entre corchetes (por ejemplo [ 0]: o [10]: ) 
             System.out.printf("[%2d]: ", i);
             // Caso 1: la celda está ocupada por un registro

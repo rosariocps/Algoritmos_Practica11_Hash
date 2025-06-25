@@ -3,18 +3,18 @@ package hash.gui;
 
 import hash.HashO;
 import hash.Register;
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 import linkedlist.Nodo;
 
 /**
- * ventana que muestra, en una fila por cada índice,
- * el contenido de tu tabla hash abierta (HashO).
+ * Ventana que muestra, en una fila por cada índice,
+ * el contenido de la tabla hash abierta (HashO<E>).
  */
 public class HashOGUI extends JFrame {
-    private final HashO tabla;
+    private final HashO<String> tabla;
 
-    public HashOGUI(HashO tabla) {
+    public HashOGUI(HashO<String> tabla) {
         super("Hash Abierto - Swing");
         this.tabla = tabla;
         initUI();
@@ -24,21 +24,22 @@ public class HashOGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(tabla.getSize(), 1, 5, 5));
 
-        // para cada bucket, creamos un JList con sus elementos
+        // Para cada bucket, creamos un JList con sus elementos
         for (int i = 0; i < tabla.getSize(); i++) {
             DefaultListModel<String> modelo = new DefaultListModel<>();
-            Nodo<Register> nodo = tabla.getBucket(i).getFirst();
+            Nodo<Register<String>> nodo = tabla.getBucket(i).getFirst();
 
             while (nodo != null) {
                 modelo.addElement(nodo.getData().toString());
                 nodo = nodo.getNext();
             }
+
             if (modelo.isEmpty()) {
                 modelo.addElement("(vacío)");
             }
 
             JList<String> lista = new JList<>(modelo);
-            lista.setBorder(BorderFactory.createTitledBorder("índice " + i));
+            lista.setBorder(BorderFactory.createTitledBorder("Índice " + i));
             add(new JScrollPane(lista));
         }
 
@@ -47,17 +48,17 @@ public class HashOGUI extends JFrame {
         setVisible(true);
     }
 
-    // método main para lanzar esta GUI
+    // Método main para lanzar esta GUI
     public static void main(String[] args) {
-        // preparas tu HashO con algunos registros
-        HashO tabla = new HashO(5);
-        tabla.insert(new Register(10, "Ana"));
-        tabla.insert(new Register(15, "Luis"));
-        tabla.insert(new Register(7, "Carlos"));
-        tabla.insert(new Register(12, "Sofía"));
-        tabla.insert(new Register(22, "Marta"));
+        // Preparamos la tabla HashO con registros tipo <String>
+        HashO<String> tabla = new HashO<>(5);
+        tabla.insert(new Register<>(10, "Ana"));
+        tabla.insert(new Register<>(15, "Luis"));
+        tabla.insert(new Register<>(7, "Carlos"));
+        tabla.insert(new Register<>(12, "Sofía"));
+        tabla.insert(new Register<>(22, "Marta"));
 
-        // lo levantas en el hilo de Swing
+        // Lo levantamos en el hilo de Swing
         SwingUtilities.invokeLater(() -> new HashOGUI(tabla));
     }
 }
