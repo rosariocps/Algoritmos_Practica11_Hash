@@ -7,7 +7,7 @@ import linkedlist.Nodo;
  * Clase que implementa una tabla hash con encadenamiento (listas enlazadas).
  */
 
- public class HashO {
+ public class HashO<E> {
 
     private ListaEnlazada<Register>[] table; 
     // creo un arreglo de listas enlazadas para guardar registros

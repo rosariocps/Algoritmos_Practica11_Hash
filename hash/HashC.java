@@ -3,7 +3,7 @@ package hash;
 /**
  * implementación de una tabla hash usando hash cerrado (sondeo lineal).
  */
-public class HashC {
+public class HashC<E> {
 
     // clase interna para representar una celda de la tabla
     private static class Element {
