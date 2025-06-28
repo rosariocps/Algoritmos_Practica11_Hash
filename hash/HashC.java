@@ -1,7 +1,7 @@
 package hash;
 
 /**
- * implementación de una tabla hash usando hash cerrado (sondeo lineal).
+ * implementación de una tabla hash usando hash cerrado (sondeo lineal, cuadrático y doble hashing).
  */
 public class HashC<E> {
 
@@ -26,7 +26,7 @@ public class HashC<E> {
         this.size  = size;
         this.table = new Element[size];
         for (int i = 0; i < size; i++) { //aqui recorremos las posiciones e inicializo con un nuevo Element vacio  disponible
-            table[i] = new Element();
+            table[i] = new Element<>();
         }
     }
 
@@ -35,6 +35,13 @@ public class HashC<E> {
      */
     private int hash(int key) {
         return key % size;
+    }
+
+    /**
+     * segunda función hash para doble hashing.
+     */
+    private int hash2(int key) {
+        return 1 + (key % (size - 1)); // asegura que nunca sea 0
     }
 
     /**
@@ -57,6 +64,41 @@ public class HashC<E> {
             idx = (idx + 1) % size; 
         } while (idx != start);
         // termina si vuelvo al inicio, la tabla está llena y no inserto
+    }
+
+    /**
+     * inserción usando SONDEO CUADRÁTICO.
+     */
+    public void insertCuadratico(Register<E> reg) {
+        int h = hash(reg.getKey()); // índice base
+        for (int i = 0; i < size; i++) {
+            int idx = (h + i * i) % size; // índice con fórmula cuadrática
+            Element<E> e = table[idx];
+            if (e.register == null || e.isAvailable) {
+                e.register    = reg;
+                e.isAvailable = false;
+                return;
+            }
+        }
+        // si no encuentra espacio, no se inserta
+    }
+
+    /**
+     * inserción usando DOBLE HASHING.
+     */
+    public void insertDobleHash(Register<E> reg) {
+        int h1 = hash(reg.getKey());  // primer hash
+        int h2 = hash2(reg.getKey()); // segundo hash
+        for (int i = 0; i < size; i++) {
+            int idx = (h1 + i * h2) % size; // fórmula de doble hashing
+            Element<E> e = table[idx];
+            if (e.register == null || e.isAvailable) {
+                e.register    = reg;
+                e.isAvailable = false;
+                return;
+            }
+        }
+        // si no encuentra espacio, no se inserta
     }
 
     /**
